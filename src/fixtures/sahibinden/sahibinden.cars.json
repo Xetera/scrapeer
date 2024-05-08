@@ -1,0 +1,128 @@
+{
+  "headers": [
+    {
+      "name": "",
+      "class": "searchResultsFirstColumn"
+    },
+    {
+      "name": "Model",
+      "class": ""
+    },
+    {
+      "name": "İlan Başlığı",
+      "class": ""
+    },
+    {
+      "name": "Yıl",
+      "class": ""
+    },
+    {
+      "name": "KM",
+      "class": ""
+    },
+    {
+      "name": "Renk",
+      "class": ""
+    },
+    {
+      "name": "Fiyat",
+      "class": "searchResultsPriceHeader"
+    },
+    {
+      "name": "İlan Tarihi",
+      "class": "searchResultsDateHeader"
+    },
+    {
+      "name": "İl / İlçe",
+      "class": "searchResultsLastColumn searchResultsLocationHeader"
+    },
+    {
+      "name": "",
+      "class": "searchResultsIgnoredColumn"
+    }
+  ],
+  "rows": [
+    {
+      "id": "1159301314",
+      "agency": {
+        "name": "İCS OTOMOTİV",
+        "link": "https://icsotomotiv.sahibinden.com/"
+      },
+      "carBrands": [],
+      "cells": [
+        {
+          "content": ""
+        },
+        {
+          "content": "4.2 FSI Quattro"
+        },
+        {
+          "content": "--İ C S--2015 ÇIKIŞLI R8 BAYİ BANG&OLUFSEN G.GÖRÜŞ F1DAYTONA GRİ"
+        },
+        {
+          "content": "2013"
+        },
+        {
+          "content": "22.000"
+        },
+        {
+          "content": "Füme"
+        },
+        {
+          "content": "9.750.000 TL"
+        },
+        {
+          "content": "08 Mayıs\n2024"
+        },
+        {
+          "content": "İstanbul\nÜmraniye"
+        },
+        {
+          "content": ""
+        }
+      ],
+      "price": 9750000
+    },
+    {
+      "id": "1165427053",
+      "carBrands": [],
+      "agency": {
+        "name": "MAJESTY",
+        "link": "https://majesty.sahibinden.com/"
+      },
+      "cells": [
+        {
+          "content": ""
+        },
+        {
+          "content": "5.2 FSI Quattro R-tronic"
+        },
+        {
+          "content": "- MAJESTY - 2024 AUDI R8 COUPE 5.2 V10 570HP RWD ISITMA B&O"
+        },
+        {
+          "content": "2024"
+        },
+        {
+          "content": "0"
+        },
+        {
+          "content": "Kırmızı"
+        },
+        {
+          "content": "21.000.000 TL"
+        },
+        {
+          "content": "07 Mayıs\n2024"
+        },
+        {
+          "content": "İstanbul\nKadıköy"
+        },
+        {
+          "content": ""
+        }
+      ],
+      "price": 21000000
+    }
+  ]
+}

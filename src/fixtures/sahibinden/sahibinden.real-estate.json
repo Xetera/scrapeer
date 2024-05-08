@@ -1,0 +1,139 @@
+{
+  "headers": [
+    {
+      "name": "",
+      "class": "searchResultsFirstColumn"
+    },
+    {
+      "name": "İlan Başlığı",
+      "class": ""
+    },
+    {
+      "name": "m² (Brüt)",
+      "class": ""
+    },
+    {
+      "name": "Oda Sayısı",
+      "class": ""
+    },
+    {
+      "name": "Fiyat",
+      "class": "searchResultsPriceHeader"
+    },
+    {
+      "name": "İlan Tarihi",
+      "class": "searchResultsDateHeader"
+    },
+    {
+      "name": "İlçe / Semt",
+      "class": "searchResultsLastColumn searchResultsLocationHeader"
+    },
+    {
+      "name": "",
+      "class": "searchResultsIgnoredColumn"
+    }
+  ],
+  "rows": [
+    {
+      "id": "1133187454",
+      "agency": {
+        "name": "EVVEL1 GAYRİMENKUL",
+        "link": "https://evvel1gayrimenkul.sahibinden.com/"
+      },
+      "carBrands": [],
+      "cells": [
+        {
+          "content": ""
+        },
+        {
+          "content": "BÜYÜKÇEKMECE PELİCAN HİLL EVLERİ ACİL SATILIK MÜSTAKİL VİLLA"
+        },
+        {
+          "content": "2.500"
+        },
+        {
+          "content": "10+2"
+        },
+        {
+          "content": "87.000.000 TL"
+        },
+        {
+          "content": "22 Nisan\n2024"
+        },
+        {
+          "content": "Büyükçekmece"
+        },
+        {
+          "content": ""
+        }
+      ],
+      "price": 87000000
+    },
+    {
+      "id": "1156606965",
+      "agency": {
+        "name": "PROJE YAPI GAYRİMENKUL",
+        "link": "https://projeyapi.sahibinden.com/"
+      },
+      "carBrands": [],
+      "cells": [
+        {
+          "content": ""
+        },
+        {
+          "content": "DENİZ MANZARALI TAMAMINA KREDİYE UYGUN ÖZEL DİZAYN FIRSAT 4+2"
+        },
+        {
+          "content": "225"
+        },
+        {
+          "content": "4+2"
+        },
+        {
+          "content": "4.490.000 TL"
+        },
+        {
+          "content": "21 Nisan\n2024"
+        },
+        {
+          "content": "Beylikdüzü\nGürpınar"
+        },
+        {
+          "content": ""
+        }
+      ],
+      "price": 4490000
+    },
+    {
+      "id": "1161742064",
+      "carBrands": [],
+      "cells": [
+        {
+          "content": ""
+        },
+        {
+          "content": "İNŞAAT FİRMASINDAN MARİNA'YA YAKIN SATILIK 4+1 DUBLEKS\n-->"
+        },
+        {
+          "content": "200"
+        },
+        {
+          "content": "4+1"
+        },
+        {
+          "content": "3.750.000 TL"
+        },
+        {
+          "content": "21 Nisan\n2024"
+        },
+        {
+          "content": "Beylikdüzü\nYakuplu"
+        },
+        {
+          "content": ""
+        }
+      ],
+      "price": 3750000
+    }
+  ]
+}

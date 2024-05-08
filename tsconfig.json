@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "incremental": false,
+    "noImplicitAny": true,
+    "target": "es2021",
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js",
+    "lib": ["DOM", "ESNext"],
+    "baseUrl": ".",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "paths": {
+      "~/*": ["src/*"]
+    },
+    "noUncheckedIndexedAccess": true,
+    "resolveJsonModule": true,
+    "types": ["vite/client", "vitest/jsdom"],
+    "strict": true,
+    "noUnusedLocals": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true
+  },
+  "exclude": ["dist", "node_modules"]
+}
