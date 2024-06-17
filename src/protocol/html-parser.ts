@@ -1,6 +1,6 @@
 import { NumberParser } from '@internationalized/number'
-import type * as S from './scrapeer'
 import { PageEvaluator } from './page-evaluator'
+import type * as S from './scrapeer'
 
 export class HTMLParser {
   // this changes based on the locale of the document being parsed
@@ -169,9 +169,32 @@ export class HTMLParser {
       case 'extractor:attribute': {
         return this.#extractAttribute(element, extractor)
       }
-      default:
+      case 'extractor:style': {
+        return this.#extractStyle(element, extractor)
+      }
+      default: {
+        // @ts-expect-error
+        const _: never = extractor
         throw new Error('Invalid extractor kind')
+      }
     }
+  }
+
+  #extractStyle(element: HTMLElement, extractor: S.StyleExtractor) {
+    const thisWindow = this.#currentDocument.defaultView
+    if (!thisWindow) {
+      throw new Error('No window instance found for current document')
+    }
+
+    const styles = thisWindow.getComputedStyle(element, extractor.pseudo)
+    if (!styles) {
+      this.#warn(
+        `Could not find any styles for element being extracted for key ${extractor.key}`,
+      )
+      return
+    }
+
+    return styles[extractor.declaration]
   }
 
   #extractText(element: HTMLElement, extractor: S.TextExtractor) {
@@ -200,7 +223,9 @@ export class HTMLParser {
         return this.#transformFallback(value, transformer)
       case 'transformer:trim':
         return this.#transformTrim(value, transformer)
-      default:
+      default: {
+        // @ts-expect-error
+        const _: never = transformer
         if ('kind' in transformer) {
           // @ts-expect-error | transformer.kind must exist
           this.#warn(`Invalid transformer kind: ${transformer.kind}`)
@@ -208,6 +233,7 @@ export class HTMLParser {
           this.#warn(`Invalid transformer: ${transformer}`)
         }
         return value
+      }
     }
   }
 
@@ -262,7 +288,15 @@ export class HTMLParser {
         return value
       }
       if (typeof value === 'string') {
-        return this.numberParser?.parse(value)
+        if (!this.numberParser) {
+          throw new Error(
+            'this.numberParser is undefined. This should never happen',
+          )
+        }
+        const numberParser = transformer.options?.force_locale
+          ? new NumberParser(transformer.options.force_locale)
+          : this.numberParser
+        return numberParser.parse(value)
       }
 
       throw new Error(`Invalid number: ${value}`)

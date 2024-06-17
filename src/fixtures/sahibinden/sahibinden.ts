@@ -1,4 +1,4 @@
-import type { JobParameters, Resource } from '~/protocol/spatula'
+import type { JobParameters, Resource } from '~/protocol/scrapeer'
 
 export const sahibindenSmallJobs: JobParameters[] = [
   {
@@ -34,10 +34,10 @@ export const sahibinden: Resource = {
       default: '0',
     },
   ],
-  pagination: {
-    kind: 'offset',
-    offsetVariable: 'pageOffset',
-  },
+  // pagination: {
+  //   kind: 'offset',
+  //   offsetVariable: 'pageOffset',
+  // },
   meta: [
     {
       kind: 'selector:node',
@@ -89,6 +89,36 @@ export const sahibinden: Resource = {
       ],
     },
     {
+      kind: 'selector:node',
+      selector: '#gmap',
+      extractors: [
+        {
+          kind: 'extractor:attribute',
+          attribute: 'data-lat',
+          key: 'latitude',
+          transformers: [
+            {
+              kind: 'transformer:cast',
+              type: 'number',
+              options: { force_locale: 'en' },
+            },
+          ],
+        },
+        {
+          kind: 'extractor:attribute',
+          attribute: 'data-lon',
+          key: 'longitude',
+          transformers: [
+            {
+              kind: 'transformer:cast',
+              type: 'number',
+              options: { force_locale: 'en' },
+            },
+          ],
+        },
+      ],
+    },
+    {
       fields: [
         {
           kind: 'selector:node',
@@ -128,7 +158,7 @@ export const sahibinden: Resource = {
         },
         {
           kind: 'selector:array',
-          key: 'carBrands',
+          key: 'car_brands',
           selector: '.car-brands-wrapper span',
           if_missing: { kind: 'recovery:omit' },
           fields: [

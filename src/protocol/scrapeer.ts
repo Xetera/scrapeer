@@ -71,7 +71,7 @@ export interface ArraySelector {
   if_missing?: Recovery
 }
 
-export type Extractor = TextExtractor | AttributeExtractor
+export type Extractor = TextExtractor | AttributeExtractor | StyleExtractor
 
 export interface TextExtractor {
   key: string
@@ -80,10 +80,35 @@ export interface TextExtractor {
 }
 
 export interface AttributeExtractor {
-  key: string
   kind: 'extractor:attribute'
+  key: string
   transformers: Transformer[]
   attribute: string
+}
+
+/**
+ * Can be used for extracting pseudo-content like
+ * @example
+ * ```css
+ * .arbitrary-class:before {
+ *   content: "hello world";
+ * }
+ * ```
+ * Using the following declaration
+ * ```json
+ * {
+ *   "key": "name",
+ *   "pseudo": ":before",
+ *   "declaration": "content"
+ * }
+ * ```
+ */
+export interface StyleExtractor {
+  kind: 'extractor:style'
+  key: string
+  pseudo?: string
+  declaration: keyof CSSStyleDeclaration
+  transformers: Transformer[]
 }
 
 export type Transformer =
@@ -98,10 +123,16 @@ export interface RegexTransformer {
   replacement?: string | null
 }
 
-export interface CastTransformer {
-  kind: 'transformer:cast'
-  type: 'number' | 'url'
-}
+export type CastTransformer =
+  | {
+      kind: 'transformer:cast'
+      type: 'url'
+    }
+  | {
+      kind: 'transformer:cast'
+      type: 'number'
+      options?: { force_locale?: string }
+    }
 
 export interface FallbackTransformer {
   kind: 'transformer:fallback'

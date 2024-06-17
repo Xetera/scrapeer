@@ -13,8 +13,8 @@ declare module 'webext-bridge' {
     'run-job': JobParameters
     'page-match': ProtocolWithReturn<ScrapedPage>
     'update-resources': Resource[]
-    start: undefined
+    start: unknown
     log: Omit<Log, 'date' | 'type' | 'id'>
-    resources: ProtocolWithReturn<void, Resource[]>
+    resources: ProtocolWithReturn<unknown, Resource[]>
   }
 }

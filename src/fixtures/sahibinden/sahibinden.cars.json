@@ -41,6 +41,8 @@
       "class": "searchResultsIgnoredColumn"
     }
   ],
+  "latitude": 40.764570622362584,
+  "longitude": 29.795659160554806,
   "rows": [
     {
       "id": "1159301314",
@@ -48,7 +50,7 @@
         "name": "İCS OTOMOTİV",
         "link": "https://icsotomotiv.sahibinden.com/"
       },
-      "carBrands": [],
+      "car_brands": [],
       "cells": [
         {
           "content": ""
@@ -85,7 +87,7 @@
     },
     {
       "id": "1165427053",
-      "carBrands": [],
+      "car_brands": [],
       "agency": {
         "name": "MAJESTY",
         "link": "https://majesty.sahibinden.com/"

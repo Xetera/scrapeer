@@ -1,20 +1,22 @@
-import { describe, it, vi, expect, afterEach } from 'vitest'
+import { http, HttpResponse } from 'msw'
+import { TypedEmitter } from 'tiny-typed-emitter'
+import { afterEach, describe, expect, it, vi } from 'vitest'
+import {
+  sahibinden,
+  sahibindenSmallJobs,
+} from '~/fixtures/sahibinden/sahibinden'
+import { server } from '~/msw'
+import { TEST_URL_ENDPOINT } from '~/setup-tools'
 import { Client, type ClientEvents, type ServerDefinition } from './client'
 import {
   type JobPollResponse,
   type JobResult,
   ServerAutonomy,
 } from './scrapeer'
-import {
-  sahibinden,
-  sahibindenSmallJobs,
-} from '~/fixtures/sahibinden/sahibinden'
-import { TEST_URL_ENDPOINT } from '~/setup-tools'
-import { HttpResponse, http } from 'msw'
-import { server } from '~/msw'
-import { TypedEmitter } from 'tiny-typed-emitter'
 
 const serverDefinition: ServerDefinition = {
+  id: '----',
+  name: 'test server',
   autonomy: ServerAutonomy.Active,
   token: '0000',
   url: TEST_URL_ENDPOINT,
@@ -24,7 +26,7 @@ describe('client', () => {
   let client: Client
 
   afterEach(() => {
-    return client.stopAll()
+    client.stopAll()
   })
 
   it('gets resources on start', async () => {
@@ -33,6 +35,7 @@ describe('client', () => {
       events,
       pollIntervalSeconds: 1,
       queueIntervalSeconds: 1,
+      enabledResources: async () => [],
       defaultServers: [serverDefinition],
     })
     const fn = vi.fn()
@@ -48,6 +51,8 @@ describe('client', () => {
       events,
       pollIntervalSeconds: 1,
       queueIntervalSeconds: 1,
+      enabledResources: async () =>
+        sahibindenSmallJobs.map((a) => a.resource_id),
       defaultServers: [serverDefinition],
     })
     const poller = vi.fn()
@@ -85,6 +90,8 @@ describe('client', () => {
       events,
       pollIntervalSeconds: 1,
       queueIntervalSeconds: 1,
+      enabledResources: async () =>
+        sahibindenSmallJobs.map((a) => a.resource_id),
       defaultServers: [serverDefinition],
     })
     await client.startAll()
@@ -101,7 +108,7 @@ describe('client', () => {
 
     events.emit('pageMatched', {
       payload: { hello: 'world' },
-      resource: sahibinden,
+      resourceId: sahibinden.id,
       source: {
         kind: 'passive',
       },
@@ -114,9 +121,9 @@ describe('client', () => {
     const request = await fn.mock.calls[0][0].request.json()
 
     expect(request).toStrictEqual({
-      kind: 'ok',
+      success: true,
       payload: { hello: 'world' },
-      resourceId: 'sahibinden:city_listing',
+      resource_id: 'sahibinden:city_listing',
       job: { kind: 'passive' },
       variables: {},
       warnings: [],

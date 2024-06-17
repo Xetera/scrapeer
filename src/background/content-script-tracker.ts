@@ -1,7 +1,7 @@
 import { shuffle } from 'lodash'
 import { onMessage } from 'webext-bridge/background'
-import { log } from './backend-logger'
 import type { Resource } from '~/protocol/scrapeer'
+import { log } from './backend-logger'
 
 export class ContentScriptTracker {
   #tabIds = new Set<number>()
@@ -27,7 +27,7 @@ export class ContentScriptTracker {
     }
 
     log({
-      text: 'No valid tabs open to run job',
+      text: 'No valid tabs open to run job. Need a tab with the script injected. Default browser tabs like chrome://* or about:chrome are not valid.',
       severity: 'error',
       data: {
         ...(resource ? { resourceId: resource.id } : {}),

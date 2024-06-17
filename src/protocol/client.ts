@@ -1,18 +1,18 @@
-import { JobQueue } from './job-queue'
-import type { ScrapedPage } from '../content-scripts/page-manager'
-import type {
-  JobPollResponse,
-  Resource,
-  JobResult,
-  JobParameters,
-  ResourcesResponse,
-  JobPollParameters,
-} from './scrapeer'
-import type { TypedEmitter } from 'tiny-typed-emitter'
 import dayjs from 'dayjs'
-import { Job } from './job'
-import { ServerAutonomy } from './scrapeer'
+import type { TypedEmitter } from 'tiny-typed-emitter'
 import { log } from '~/background/backend-logger'
+import type { ScrapedPage } from '../content-scripts/page-manager'
+import { Job } from './job'
+import { JobQueue } from './job-queue'
+import type {
+  JobParameters,
+  JobPollParameters,
+  JobPollResponse,
+  JobResult,
+  Resource,
+  ResourcesResponse,
+} from './scrapeer'
+import { ServerAutonomy } from './scrapeer'
 
 const PRECONDITION_FAILED = 412
 
@@ -44,6 +44,7 @@ export class Client {
     enabledResources,
   }: ScrapeerClientOptions) {
     this.#pollIntervalSeconds = pollIntervalSeconds
+    // We're assuming that there is only one server and that this isn't empty
     this.servers = defaultServers
     this.#queue = new JobQueue<JobParameters>({
       minimumWaitSeconds: queueIntervalSeconds,
@@ -60,6 +61,11 @@ export class Client {
 
   get allResources(): Resource[] {
     return Array.from(this.#resources.values()).flat()
+  }
+
+  getServer(): ServerDefinition {
+    // biome-ignore lint/style/noNonNullAssertion: We'll add multi server support soon enough
+    return this.servers[0]!
   }
 
   async start(server: ServerDefinition) {
@@ -102,6 +108,20 @@ export class Client {
 
   addServer(server: ServerDefinition) {
     this.servers.push(server)
+  }
+
+  updateServer(newServer: Partial<ServerDefinition>) {
+    // TODO: support multiple servers
+    const [server] = this.servers
+    if (!server) {
+      log({
+        severity: 'error',
+        text: 'Tried to update server URL but no server is defined',
+        data: "url" in newServer ? { url: newServer.url } : {},
+      })
+      return
+    }
+    Object.assign(server, newServer)
   }
 
   stopAll() {
@@ -258,6 +278,10 @@ export class Client {
       this.#events.emit('polled', server, body.jobs)
 
       if (body.refetch?.includes('resources')) {
+        log({
+          severity: "info",
+          text: "The server requested a refetch because the resources have changed",
+        })
         await this.#updateResource(server)
       }
 
@@ -265,8 +289,11 @@ export class Client {
     } catch (error) {
       log({
         severity: 'error',
-        text: `Error polling for new jobs: ${server.name}`,
-        data: { server },
+        text: `Error polling for new jobs: ${server.name} ${error}`,
+        data: {
+          server,
+          message: error instanceof Error ? error.message : '[unknown error]',
+        },
       })
       console.error('Error polling for jobs:', error)
       if (this.#errorCount % 3 === 0) {
@@ -293,7 +320,7 @@ export class Client {
     return new Request(request, {
       headers: {
         ...Object.fromEntries(request.headers.entries()),
-        Authorization: `Bearer ${server.token}`,
+        Authorization: `${server.token}`,
         'Idempotency-Key': Math.random().toString(36).substring(2),
         'Content-Type': 'application/json; charset=utf-8',
       },
@@ -307,7 +334,7 @@ export class Client {
     const url = new URL('/worker/jobs', base)
     url.searchParams.set('autonomy', options.autonomy)
     for (const id of options.resourceIds) {
-      url.searchParams.append('resource', id)
+      url.searchParams.append('resource[]', id)
     }
     return new Request(url, { method: 'GET' })
   }

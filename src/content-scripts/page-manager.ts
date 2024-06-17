@@ -1,5 +1,6 @@
-import { onMessage, sendMessage } from 'webext-bridge/content-script'
 import isEqual from 'lodash/isEqual'
+import { onMessage, sendMessage } from 'webext-bridge/content-script'
+import { HTMLParser } from '~/protocol/html-parser'
 import {
   type MatchingResource,
   PageEvaluator,
@@ -10,11 +11,10 @@ import type {
   Resource,
   UnknownPayload,
 } from '../protocol/scrapeer'
-import { HTMLParser } from '~/protocol/html-parser'
 
-import { iframeScrape } from './iframe-injector'
-import { sendLog } from './content-script-log'
 import { Timeout, timeoutReject } from '~/shared'
+import { sendLog } from './content-script-log'
+import { iframeScrape } from './iframe-injector'
 
 const JOB_FINISHED_MARKER = 'spatula:job-finished'
 
@@ -37,6 +37,7 @@ export class PageManager {
       return this.run()
     })
     onMessage('run-job', ({ data: params }) => this.#scrapePage(params))
+    console.log('Added run-job event handler')
   }
 
   async run() {
@@ -44,7 +45,7 @@ export class PageManager {
     if (matching.kind === 'match') {
       const resources = await this.#processPage(document, matching, {
         ...(this.isInIframe
-          ? { kind: 'active', id: this.#jobIdFromHash() }
+          ? { kind: 'active', id: await this.getJobId() }
           : { kind: 'passive' }),
       })
       console.log('[spatula:page-manager] sending page-match event')
@@ -90,6 +91,7 @@ export class PageManager {
       source,
       warnings: parser.warnings,
     }
+    console.log('source', source)
     // in case we're in an iframe, we want to let the parent know
     window.parent?.postMessage(JOB_FINISHED_MARKER, '*')
     return out
@@ -138,7 +140,7 @@ export class PageManager {
         } else {
           sendLog({
             severity: 'error',
-            text: 'Timed out while waiting for an iframe marker. Received nothing',
+            text: 'Timed out while waiting for an iframe marker. Received no events',
           })
         }
       }
@@ -148,8 +150,10 @@ export class PageManager {
     }
   }
 
-  #jobIdFromHash() {
-    return window.location.hash
+  getJobId() {
+    return chrome.storage.local
+      .get({ currentJobId: null })
+      .then((r) => r.currentJobId)
   }
 }
 

@@ -35,12 +35,13 @@ export async function addDisableChipsListener(origins: string[]) {
   for (const origin of origins) {
     chrome.cookies.getAll(
       {
-        name: 'cf_clearance',
+        name: CF_CLEARANCE,
         // @ts-expect-error
         partitionKey: { topLevelSite: `https://${origin}` },
       },
       (cookies) => {
         if (cookies.length > 0) {
+          console.log('got cookies', cookies)
           const cookie = cookies[0] as chrome.cookies.Cookie
           disableChips(cookie, origin)
         }
@@ -48,15 +49,17 @@ export async function addDisableChipsListener(origins: string[]) {
     )
   }
   chrome.cookies.onChanged.addListener(async (changeInfo) => {
+    console.log('changeinfo', changeInfo)
     if (changeInfo.cookie.name !== CF_CLEARANCE || changeInfo.removed) {
       return
     }
     if (
       origins.some((origin) =>
-        origin.includes(originToUrl(changeInfo.cookie.domain)),
+        origin.includes(changeInfo.cookie.domain),
       ) &&
       'partitionKey' in changeInfo.cookie
     ) {
+      console.log('got partitioningninasin ania fn', changeInfo)
       disableChips(changeInfo.cookie, changeInfo.cookie.domain)
     }
   })

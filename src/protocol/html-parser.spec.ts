@@ -1,9 +1,9 @@
 import fs from 'node:fs'
 import { describe, expect, it } from 'vitest'
+import { instagram } from '~/fixtures/instagram/instagram'
+import { sahibinden } from '~/fixtures/sahibinden/sahibinden'
 import { HTMLParser } from './html-parser'
 import type { Resource } from './scrapeer'
-import { sahibinden } from '~/fixtures/sahibinden/sahibinden'
-import { instagram } from '~/fixtures/instagram/instagram'
 
 function p(opts: Partial<Resource>) {
   return new HTMLParser({
@@ -352,4 +352,31 @@ describe.concurrent('html-parser', () => {
       foo: { bar: '4815162342', baz: 'zoop' },
     })
   })
+
+  // it('parses pseudo selector styles', async () => {
+  //   const parser = p({
+  //     descriptors: [
+  //       {
+  //         kind: 'selector:node',
+  //         selector: 'div',
+  //         extractors: [
+  //           {
+  //             kind: 'extractor:style',
+  //             key: 'style',
+  //             pseudo: ':before',
+  //             declaration: 'content',
+  //             transformers: [],
+  //           },
+  //         ],
+  //       },
+  //     ],
+  //   })
+  //   await expect(
+  //     parser.parseAsync(
+  //       '<style>.zoop:before { content: "testing" }</style><div hello="zoop"></div>',
+  //     ),
+  //   ).resolves.toStrictEqual({
+  //     foo: { stype: 'testing' },
+  //   })
+  // })
 })

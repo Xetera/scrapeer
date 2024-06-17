@@ -1,6 +1,7 @@
 export function iframeScrape(src: string, jobId: string): HTMLIFrameElement {
   const iframe = document.createElement('iframe')
-  iframe.src = `${src}#${jobId}`
+  chrome.storage.local.set({ currentJobId: jobId })
+  iframe.src = src
   iframe.height = '1080px'
   iframe.width = '1920px'
   iframe.style.opacity = '0'
